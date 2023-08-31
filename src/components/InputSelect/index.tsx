@@ -21,14 +21,16 @@ export function InputSelect<TItem>({
   const onChange = useCallback<InputSelectOnChange<TItem>>(
     (selectedItem) => {
       if (selectedItem === null) {
-        return
+        setSelectedValue(null); // Reset the selected employee state
+        return;
       }
-
-      consumerOnChange(selectedItem)
-      setSelectedValue(selectedItem)
+  
+      consumerOnChange(selectedItem);
+      setSelectedValue(selectedItem);
     },
     [consumerOnChange]
-  )
+  );
+  
 
   return (
     <Downshift<TItem>
@@ -119,13 +121,18 @@ export function InputSelect<TItem>({
 
 const getDropdownPosition: GetDropdownPositionFn = (target) => {
   if (target instanceof Element) {
-    const { top, left } = target.getBoundingClientRect()
-    const { scrollY } = window
-    return {
-      top: scrollY + top + 63,
-      left,
+    const container = target.closest(".RampInputSelect--root");
+    if (container) {
+      const { top, left } = container.getBoundingClientRect();
+      const { scrollY } = window;
+      const { scrollTop } = container; // Get the parent container's scrollTop
+      return {
+        top: scrollY + scrollTop + top + 63,
+        left,
+      };
     }
   }
 
-  return { top: 0, left: 0 }
-}
+  return { top: 0, left: 0 };
+};
+

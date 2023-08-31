@@ -76,14 +76,14 @@ export function App() {
 
           {transactions !== null && (
             <button
-              className="RampButton"
-              disabled={paginatedTransactionsUtils.loading}
-              onClick={async () => {
-                await loadAllTransactions()
-              }}
-            >
-              View More
-            </button>
+            className="RampButton"
+            disabled={paginatedTransactionsUtils.loading || !paginatedTransactionsUtils.hasMore}
+            onClick={async () => {
+              await paginatedTransactionsUtils.fetchAll(); // Fetch more data
+            }}
+          >
+            View More
+          </button>
           )}
         </div>
       </main>
